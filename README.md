@@ -29,7 +29,7 @@ Once integrated with your App you can see the log entries in DB Table and also t
 ## Installation Steps 
 
  -  In your Gemfile 
-    `gem 'trafficlogger','~>1.0.0'`
+    `gem 'trafficlogger'`
 
  -  `bundle install`
 
