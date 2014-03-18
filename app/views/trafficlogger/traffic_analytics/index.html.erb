@@ -1,0 +1,25 @@
+<div style="padding: 1em">
+	<div class="search">
+		<%= form_tag traffic_analytics_index_path, :method => 'get', :id => "records_search" do %>
+		  <p>
+		  	<%= submit_tag "Search", :name => nil, :id=>"search_results" %>
+		    <%= text_field_tag :searchterm, params[:searchterm] %>
+		    <%= radio_button_tag 'searchtype', "path_info", true, :class => "searchtype" %> Req URI
+		    <%= radio_button_tag 'searchtype', "original_full_path", false, :class => "searchtype" %> Original Req URI
+		    <%= radio_button_tag 'searchtype', "request_uri", false, :class => "searchtype" %> Original Req URI(with Hostname)
+		    <%= radio_button_tag 'searchtype', "http_user_agent", false, :class => "searchtype" %> User Agent
+		    <%= radio_button_tag 'searchtype', "request_method", false, :class => "searchtype" %> Request Type
+		  </p>
+		<% end %>
+	</div>
+	</br>
+	<div id="resultset">
+		<%= render :partial=>'listings' %>
+	</div>
+</div>
+<script>
+$("#search_results").click(function() {
+	$.get($("#records_search").attr("action"), $("#records_search").serialize(), null, "script");
+  return false;
+});
+</script>

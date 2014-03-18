@@ -1,0 +1,244 @@
+<% if @records.blank? %>
+	<div>
+		<% if params[:searchterm] and params[:searchtype] %>
+			<h4>There are no records in this Queue for search term <font color='green'><%= params[:searchterm] %></font> and search type <font color='green'><%= params[:searchtype]%></font></h4>
+		<% end %>
+	</div>
+<% end %>
+<%= will_paginate @records %>
+<table class="resultlist" cellspacing='0'>
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Requested URI</th>
+			<th>Original Requested URI</th>
+			<th>Original Requested URI(with Host)</th>
+			<th>Server Name</th>
+			<th>Request Type</th>
+			<th>Referer URI</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @records.each_with_index do |rec,idx| %>
+			<% klass = idx%2==0 ? "even" : "odd" %>
+			<tr class="<%= klass %>">
+				<td><%= rec.id %></td>
+				<td><%= rec.path_info %></td>
+				<td><%= rec.original_full_path %></td>
+				<td><%= rec.request_uri %></td>
+				<td><%= rec.server_name %></td>
+				<td><%= rec.request_method %></td>
+				<td><%= rec.http_referer %></td>
+				<td>
+					<button class="show_more_button complete_record_details" data="<%= rec.id %>">More</button>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="5" id='<%= rec.id %>-complete_record_details' class="complete_record_details_row">
+					<table class="resultlist" cellspacing='0'>
+						<tbody>
+							<tr>
+								<td>User Agent</td>
+								<td><%= rec.http_user_agent %></td>
+							</tr>
+							<tr>
+								<td>HTTP Version</td>
+								<td><%= rec.http_version %></td>
+							</tr>
+							<tr>
+								<td>Gaateway Interface</td>
+								<td><%= rec.gateway_interface %></td>
+							</tr>
+							<tr>
+								<td>Remote Address</td>
+								<td><%= rec.remote_addr %></td>
+							</tr>
+							<tr>
+								<td>Remote Host</td>
+								<td><%= rec.remote_host %></td>
+							</tr>
+							<tr>
+								<td>Remote HTTP Host</td>
+								<td><%= rec.http_host %></td>
+							</tr>
+							<tr>
+								<td>Server Software</td>
+								<td><%= rec.server_software %></td>
+							</tr>
+							<tr>
+								<td>Server Port</td>
+								<td><%= rec.server_port %></td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+		<% end %>
+	</tobdy>
+</table>
+<% if !@records.blank? %>
+	<%= will_paginate @records %>
+<% end %>
+<script>
+$(document).ready(function(){
+  $('.complete_record_details_row').hide();
+  $('.complete_record_details').click(function(){
+    $record_id =$(this).attr('data');
+    if ($('#'+$record_id+'-complete_record_details').is(":hidden"))
+    {
+    	$('#'+$record_id+'-complete_record_details').toggle(300);
+      return false;
+    }
+    else
+    {
+      $('#'+$record_id+'-complete_record_details').toggle(300)
+      return false;
+    }
+  });
+});
+</script>
+<style>
+.resultlist a:link {
+	color: #666;
+	font-weight: bold;
+	text-decoration:none;
+}
+.resultlist a:visited {
+	color: #999999;
+	font-weight:bold;
+	text-decoration:none;
+}
+.resultlist a:active,
+.resultlist a:hover {
+	color: #bd5a35;
+	text-decoration:underline;
+}
+.resultlist {
+	font-family:Arial, Helvetica, sans-serif;
+	color:#666;
+	font-size:12px;
+	text-shadow: 1px 1px 0px #fff;
+	background:#eaebec;
+	margin:20px;
+	border:#ccc 1px solid;
+
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+
+	-moz-box-shadow: 0 1px 2px #d1d1d1;
+	-webkit-box-shadow: 0 1px 2px #d1d1d1;
+	box-shadow: 0 1px 2px #d1d1d1;
+}
+.resultlist th {
+	padding:21px 25px 22px 25px;
+	border-top:1px solid #fafafa;
+	border-bottom:1px solid #e0e0e0;
+
+	background: #ededed;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
+	background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
+}
+.resultlist th:first-child {
+	text-align: left;
+	padding-left:20px;
+}
+.resultlist tr:first-child th:first-child {
+	-moz-border-radius-topleft:3px;
+	-webkit-border-top-left-radius:3px;
+	border-top-left-radius:3px;
+}
+.resultlist tr:first-child th:last-child {
+	-moz-border-radius-topright:3px;
+	-webkit-border-top-right-radius:3px;
+	border-top-right-radius:3px;
+}
+.resultlist tr {
+	text-align: center;
+	padding-left:20px;
+}
+.resultlist td:first-child {
+	text-align: left;
+	padding-left:20px;
+	border-left: 0;
+}
+.resultlist td {
+	padding:18px;
+	border-top: 1px solid #ffffff;
+	border-bottom:1px solid #e0e0e0;
+	border-left: 1px solid #e0e0e0;
+
+	background: #fafafa;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa));
+	background: -moz-linear-gradient(top,  #fbfbfb,  #fafafa);
+}
+.resultlist tr.even td {
+	background: #f6f6f6;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
+	background: -moz-linear-gradient(top,  #f8f8f8,  #f6f6f6);
+}
+.resultlist tr:last-child td {
+	border-bottom:0;
+}
+.resultlist tr:last-child td:first-child {
+	-moz-border-radius-bottomleft:3px;
+	-webkit-border-bottom-left-radius:3px;
+	border-bottom-left-radius:3px;
+}
+.resultlist tr:last-child td:last-child {
+	-moz-border-radius-bottomright:3px;
+	-webkit-border-bottom-right-radius:3px;
+	border-bottom-right-radius:3px;
+}
+.resultlist tr:hover td {
+	background: #f2f2f2;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
+	background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);	
+}
+
+.show_more_button {
+	-moz-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+	box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
+	background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#79bbff', endColorstr='#378de5');
+	background-color:#79bbff;
+	-webkit-border-top-left-radius:37px;
+	-moz-border-radius-topleft:37px;
+	border-top-left-radius:37px;
+	-webkit-border-top-right-radius:37px;
+	-moz-border-radius-topright:37px;
+	border-top-right-radius:37px;
+	-webkit-border-bottom-right-radius:37px;
+	-moz-border-radius-bottomright:37px;
+	border-bottom-right-radius:37px;
+	-webkit-border-bottom-left-radius:37px;
+	-moz-border-radius-bottomleft:37px;
+	border-bottom-left-radius:37px;
+	text-indent:0px;
+	border:1px solid #84bbf3;
+	display:inline-block;
+	color:#ffffff;
+	font-family:Trebuchet MS;
+	font-size:15px;
+	font-weight:bold;
+	font-style:normal;
+	height:38px;
+	line-height:38px;
+	width:111px;
+	text-decoration:none;
+	text-align:center;
+	text-shadow:1px 1px 0px #528ecc;
+}
+.show_more_button:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
+	background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#378de5', endColorstr='#79bbff');
+	background-color:#378de5;
+}.show_more_button:active {
+	position:relative;
+	top:1px;
+}
+</style>
