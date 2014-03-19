@@ -1,21 +1,25 @@
 <% if @records.blank? %>
 	<div>
 		<% if params[:searchterm] and params[:searchtype] %>
-			<h4>There are no records in this Queue for search term <font color='green'><%= params[:searchterm] %></font> and search type <font color='green'><%= params[:searchtype]%></font></h4>
+			<h4><font color='red'>No records found...</font></h4>
 		<% end %>
 	</div>
 <% end %>
-<%= will_paginate @records %>
+<div class="r_pagination">
+	<%= will_paginate @records %>
+</div>
 <table class="resultlist" cellspacing='0'>
 	<thead>
 		<tr>
 			<th>ID</th>
-			<th>Requested URI</th>
-			<th>Original Requested URI</th>
-			<th>Original Requested URI(with Host)</th>
-			<th>Server Name</th>
-			<th>Request Type</th>
-			<th>Referer URI</th>
+			<th>Request URI</th>
+			<th>Full URI</th>
+			<th>Server</th>
+			<th>Method</th>
+			<th>Referer</th>
+			<th>User Platform</th>
+			<th>User OS</th>
+			<th>User Device</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -25,13 +29,15 @@
 			<tr class="<%= klass %>">
 				<td><%= rec.id %></td>
 				<td><%= rec.path_info %></td>
-				<td><%= rec.original_full_path %></td>
 				<td><%= rec.request_uri %></td>
 				<td><%= rec.server_name %></td>
 				<td><%= rec.request_method %></td>
 				<td><%= rec.http_referer %></td>
+				<td><%= rec.operating_system %></td>
+				<td><%= rec.device %></td>
+				<td><%= rec.platform %></td>
 				<td>
-					<button class="show_more_button complete_record_details" data="<%= rec.id %>">More</button>
+					<button class="r_button complete_record_details" data="<%= rec.id %>">More</button>
 				</td>
 			</tr>
 			<tr>
@@ -39,7 +45,11 @@
 					<table class="resultlist" cellspacing='0'>
 						<tbody>
 							<tr>
-								<td>User Agent</td>
+								<td>URI Path</td>
+								<td><%= rec.original_full_path %></td>
+							</tr>
+							<tr>
+								<td>User Agent Data</td>
 								<td><%= rec.http_user_agent %></td>
 							</tr>
 							<tr>
@@ -70,6 +80,10 @@
 								<td>Server Port</td>
 								<td><%= rec.server_port %></td>
 							</tr>
+							<tr>
+								<td>Created At</td>
+								<td><%= rec.created_at %></td>
+							</tr>
 						</tbody>
 					</table>
 				</td>
@@ -78,7 +92,9 @@
 	</tobdy>
 </table>
 <% if !@records.blank? %>
-	<%= will_paginate @records %>
+	<div class="r_pagination">
+		<%= will_paginate @records %>
+	</div>
 <% end %>
 <script>
 $(document).ready(function(){
@@ -197,7 +213,7 @@ $(document).ready(function(){
 	background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);	
 }
 
-.show_more_button {
+.r_button {
 	-moz-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
 	box-shadow:inset 0px 1px 0px 0px #bbdaf7;
@@ -232,12 +248,12 @@ $(document).ready(function(){
 	text-align:center;
 	text-shadow:1px 1px 0px #528ecc;
 }
-.show_more_button:hover {
+.r_button:hover {
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
 	background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#378de5', endColorstr='#79bbff');
 	background-color:#378de5;
-}.show_more_button:active {
+}.r_button:active {
 	position:relative;
 	top:1px;
 }

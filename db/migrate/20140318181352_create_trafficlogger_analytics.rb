@@ -11,7 +11,6 @@ class CreateTrafficloggerAnalytics < ActiveRecord::Migration
   		t.string :query_string
   		t.string :remote_host
   		t.text   :http_accept_encoding
-  		t.text   :http_user_agent
   		t.string :server_protocol
   		t.string :http_accept_language
   		t.string :http_host
@@ -22,6 +21,10 @@ class CreateTrafficloggerAnalytics < ActiveRecord::Migration
   		t.string :request_method
   		t.string :http_connection
       t.string :http_version
+      t.text   :http_user_agent
+      t.string :platform
+      t.string :device
+      t.string :operating_system
       t.timestamps
     end
     add_index :trafficlogger_analytics, :server_name
@@ -29,5 +32,8 @@ class CreateTrafficloggerAnalytics < ActiveRecord::Migration
   	add_index :trafficlogger_analytics, :request_uri
   	add_index :trafficlogger_analytics, :path_info
     add_index :trafficlogger_analytics, :original_full_path
+    add_index :trafficlogger_analytics, :platform
+    add_index :trafficlogger_analytics, :device
+    add_index :trafficlogger_analytics, :operating_system
   end
 end

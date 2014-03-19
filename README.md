@@ -20,6 +20,10 @@ The gem tracks incoming HTTP requests coming to your site and logs them with det
 - HTTP_CONNECTION
 And More!
 
+Also it has inbuilt parser to extract Operating System,Platform,Device from HTTP_USER_AGENT. When the logger runs the Parser auto-extracts these information wherever applicable. Neverthless you can re-use the component yourself in your App anytime by running 
+`Trafficlogger::UAParse.extract(your_string)`
+Example => `Trafficlogger::UAParse.extract('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.151 Safari/535.19')`
+
 ## Demonstration
 
 Sample App - https://github.com/raycoding/rTracker
@@ -51,7 +55,6 @@ Once integrated with your App you can see the log entries in DB Table and also t
 
   - Ruby 1.9.3+
   - Rails 3.2.13
-  - MySQL
   - will_paginate
 
 ### ToDo
