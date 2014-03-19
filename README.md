@@ -53,10 +53,8 @@ Once integrated with your App you can see the log entries in DB Table and also t
 
 ## Dependencies
 
-  - Ruby 1.9.3+
-  - Rails 3.2.13
-  - will_paginate
-
-### ToDo
-
- Porting this for Rails 2.x is not difficult as only few scope conditions at model level needs to changed ; which are for Rails 3 but does not work for Rails 2, feel free to fork it and contribute for Rails 2.x platforms, also it should work on Ruby 1.8.7+
+  - Ruby 1.9.2+ possibly 1.8.7(you will need to fork it and modiy to test on 1.8.7)
+  - Rails 3.2.x
+  - will_paginate 3.0.x
+  - jquery-ui-rails 4.0.x
+  - jQuery 1.10 is included as part of assets in Trafficlogger, so if your app uses .live function anywhere kindly replace .live function which has been deprecated since jQuery 1.7+

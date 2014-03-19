@@ -11,6 +11,44 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 0) do
+ActiveRecord::Schema.define(:version => 20140319104457) do
+
+  create_table "trafficlogger_analytics", :force => true do |t|
+    t.string   "server_name"
+    t.string   "server_port"
+    t.text     "server_software"
+    t.string   "gateway_interface"
+    t.string   "path_info"
+    t.string   "original_full_path"
+    t.string   "request_uri"
+    t.string   "query_string"
+    t.string   "remote_host"
+    t.text     "http_accept_encoding"
+    t.string   "server_protocol"
+    t.string   "http_accept_language"
+    t.string   "http_host"
+    t.string   "remote_addr"
+    t.text     "http_referer"
+    t.string   "http_cookie"
+    t.text     "http_accept"
+    t.string   "request_method"
+    t.string   "http_connection"
+    t.string   "http_version"
+    t.text     "http_user_agent"
+    t.string   "platform"
+    t.string   "device"
+    t.string   "operating_system"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  add_index "trafficlogger_analytics", ["device"], :name => "index_trafficlogger_analytics_on_device"
+  add_index "trafficlogger_analytics", ["operating_system"], :name => "index_trafficlogger_analytics_on_operating_system"
+  add_index "trafficlogger_analytics", ["original_full_path"], :name => "index_trafficlogger_analytics_on_original_full_path"
+  add_index "trafficlogger_analytics", ["path_info"], :name => "index_trafficlogger_analytics_on_path_info"
+  add_index "trafficlogger_analytics", ["platform"], :name => "index_trafficlogger_analytics_on_platform"
+  add_index "trafficlogger_analytics", ["request_method"], :name => "index_trafficlogger_analytics_on_request_method"
+  add_index "trafficlogger_analytics", ["request_uri"], :name => "index_trafficlogger_analytics_on_request_uri"
+  add_index "trafficlogger_analytics", ["server_name"], :name => "index_trafficlogger_analytics_on_server_name"
 
 end

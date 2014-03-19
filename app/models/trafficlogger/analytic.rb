@@ -42,27 +42,76 @@ module Trafficlogger
 				Analytic.create(log_data)
 			end
 
-		  def search(searchterm,searchtype)
-		    if !searchterm.blank? and !searchtype.blank?
-		      case searchtype
-		      when "path_info"
-		        where("path_info = ?",searchterm).order("created_at desc")
-		      when "request_uri"
-		        where("request_uri = ?",searchterm).order("created_at desc")
-		      when "request_method"
-		        where("request_method = ?",searchterm).order("created_at desc")
-		      when "operating_system"
-		        where("operating_system = ?",searchterm).order("created_at desc")
-		      when "device"
-		        where("device = ?",searchterm).order("created_at desc")
-		      when "platform"
-		        where("platform = ?",searchterm).order("created_at desc")
-		      else
-		        order("created_at desc").scoped
-		      end
-		    else
-		      order("created_at desc").scoped
+			attr_accessor :data
+		  def find_listings params
+		    @data = params
+		    Rails.logger.info "Search Parameters passed for Trafficlogger Analytic ----> #{params.inspect}"
+		    @records_listing = find_records
+		    @records_listing
+		  end
+
+		  def find_records
+		    Analytic.where(conditions).order("created_at DESC")
+		  end
+
+		  def path_info_inline_search_clause
+		    unless data['path_info_inline_search'].blank?
+		      ["trafficlogger_analytics.path_info LIKE ?", "%#{data['path_info_inline_search'][0]}%"]
 		    end
+		  end
+
+		  def path_info_clause
+		    ["trafficlogger_analytics.path_info = ?", "#{data['path_info_search']}"] unless data['path_info_search'].blank?
+		  end
+
+		  def request_uri_clause
+		    ["trafficlogger_analytics.request_uri = ?", "#{data['request_uri_search']}"] unless data['request_uri_search'].blank?
+		  end
+
+		  def request_method_clause
+		    ["trafficlogger_analytics.request_method = ?", "#{data['request_method_search']}"] unless data['request_method_search'].blank?
+		  end
+
+		  def operating_system_clause
+		    ["trafficlogger_analytics.operating_system = ?", "#{data['operating_system_search']}"] unless data['operating_system_search'].blank?
+		  end
+
+		  def device_clause
+		    ["trafficlogger_analytics.device = ?", "#{data['device_search']}"] unless data['device_search'].blank?
+		  end
+
+		  def platform_clause
+		    ["trafficlogger_analytics.platform = ?", "#{data['platform_search']}"] unless data['platform_search'].blank?
+		  end
+
+		  def minimum_created_at_clause
+		    unless data['minimum_created_at_search'].blank?
+		      minimum_created_at_search = data['minimum_created_at_search'].to_date.strftime("%Y-%m-%d")
+		      ["DATE(trafficlogger_analytics.created_at) >= DATE(?)", "#{minimum_created_at_search}"]
+		    end
+		  end
+
+		  def maximum_created_at_clause
+		    unless data['maximum_created_at_search'].blank?
+		      maximum_created_at_search = data['maximum_created_at_search'].to_date.strftime("%Y-%m-%d")
+		      ["DATE(trafficlogger_analytics.created_at) <= DATE(?)", "#{maximum_created_at_search}"]
+		    end
+		  end
+
+		  def conditions
+		    [conditions_clauses.join(' AND '), *conditions_options]
+		  end
+
+		  def conditions_clauses
+		    conditions_parts.map { |condition| condition.first }
+		  end
+
+		  def conditions_options
+		    conditions_parts.map { |condition| condition[1..-1] }.flatten
+		  end
+
+		  def conditions_parts
+		    singleton_methods.grep(/_clause$/).map { |m| send(m) }.compact
 		  end
 		end
   end

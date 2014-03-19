@@ -17,7 +17,8 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", "~> 3.2"
-  s.required_ruby_version = '>= 1.9.2' #Work on 1.9.2+, may be on 1.8.7!
+  s.required_ruby_version = '>= 1.9.2' #may be on 1.8.7!
   s.add_dependency "rack","~>1.4"
   s.add_dependency "will_paginate", "~>3.0"
+  s.add_dependency "jquery-ui-rails", "~>4.0"
 end

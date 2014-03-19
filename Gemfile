@@ -5,3 +5,5 @@ source "http://rubygems.org"
 # development dependencies will be added by default to the :development group.
 gemspec
 gem 'mysql2', '~>0.3.14'
+gem 'jquery-ui-rails', '~>4.0.5'
+gem 'will_paginate', '~>3.0.5'

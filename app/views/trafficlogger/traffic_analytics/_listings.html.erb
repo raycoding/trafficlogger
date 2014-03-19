@@ -12,7 +12,9 @@
 	<thead>
 		<tr>
 			<th>ID</th>
-			<th>Request URI</th>
+			<th>
+				Request URI <%= text_field(:path_info_inline_search,'',:size=>20,:placeholder=>' alteast 5 letters') %>
+			</th>
 			<th>Full URI</th>
 			<th>Server</th>
 			<th>Method</th>
@@ -33,9 +35,9 @@
 				<td><%= rec.server_name %></td>
 				<td><%= rec.request_method %></td>
 				<td><%= rec.http_referer %></td>
+				<td><%= rec.platform %></td>
 				<td><%= rec.operating_system %></td>
 				<td><%= rec.device %></td>
-				<td><%= rec.platform %></td>
 				<td>
 					<button class="r_button complete_record_details" data="<%= rec.id %>">More</button>
 				</td>
